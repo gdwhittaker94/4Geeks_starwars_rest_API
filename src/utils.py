@@ -1,5 +1,7 @@
 from flask import jsonify, url_for
 
+# url_for allows us to generate html inside python 
+
 class APIException(Exception):
     status_code = 400
 
@@ -39,3 +41,7 @@ def generate_sitemap(app):
         <p>Start working on your proyect by following the <a href="https://start.4geeksacademy.com/starters/flask" target="_blank">Quick Start</a></p>
         <p>Remember to specify a real endpoint path like: </p>
         <ul style="text-align: left;">"""+links_html+"</ul></div>"
+
+    # Parte visual del API live 
+    # All styles have to be inline here 
+    # Gastón: added html head and body in order to affect styling 

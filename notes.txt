@@ -1,0 +1,88 @@
+NB: Use Reading from "Building StarWars Data Model" for this project
+
+
+/// LOS ARCHIVOS ///
+
+- app.py = where we save our endpoints + where our data is shown on the screen  
+
+    > OUR SERVER 
+
+- models.py = same as starwars database model, the models for the tables 
+
+    > using SQL + Flask 
+
+- utils.py = where we store functions, and allows us to generate html on the root endpoint  
+
+    > API LIVE "/"
+
+- admin.py = GUI una aplicación GUI para poder revisar todo que está dentro de nuestra bbdd sin tener que escribir mucho código  
+
+    > DATABASE GUI "/admin"
+
+- wsgi.py = importa la aplicación y ejecuta una condicional 
+
+
+
+/// API LIVE PAGE /// 
+
+- 'pipenv run start' = starts API live (NB: change visibility to public for Postman access)
+    > API live is set to "/" endpoint and comes from a function in utils.py 
+
+- on left of page = endpoints 
+
+- API host = basepoint for the endpoints, similar to SWAPI.tech 
+
+
+/// PSQL (VIEW DATABASE IN TERMINAL) ///
+
+- 'psql -h localhost -p <portNumber> example -U gitpod' = what we need to access the database 
+    > '-h' = host
+    > '-p' = port 
+    > 'example -U' = from readme.md 
+    > 'gitpod' = user
+
+- PSQL Commands:
+    > 'example=# \dt' = visualises databases we have
+    > 'example=# \d <tablename>' = visualises all the info of a specific table
+    > 'example=# select * from "<tablename>"' = shows all from x table 
+    > 'example=# \q' = exits psql
+
+
+/// PIPFILE (VIEW DATABASE VIUSALLY) ///
+
+- Inside API Live click "/admin" or enter API url/admin to see visual database 
+
+    > appears as a result of 'flash-admin = "*"' inside pipfile
+
+
+
+
+
+---------------------------------------
+
+* URL: (https://docs.google.com/document/d/14WOnDcRt2hQ9ShsJHmgdsnFIjM2d4B0ji04wxJFCIFk/edit#heading=h.pf589isj2cuo)
+    
+    > Section on 'Select' has everything we need to makeour GET request. 
+    
+    @app.route...(GET)
+    def handle_hello():
+    # SELECT * FROM user where ID = 1
+    user = User.query.get(1);
+    print(user)
+    return jsonify
+
+*   pipenv run migrate = like git commit --> commands we use when add new tables or modif tables 
+    pipenv run upgrade = like git push 
+
+pipenv run init;
+pipenv run migrate;
+pipenv run upgrade;
+
+* migrations folder = stores our tables and versions, creates version history --> don't upload migrations to github!!!
+
+
+GASTON ADVICE: 
+- Plan bien las tablas y cómo se interconectan 
+- Añade las categorias a la vez, no añadas más luego 
+- can create DB via Postman o API Live GUI 
+- 
