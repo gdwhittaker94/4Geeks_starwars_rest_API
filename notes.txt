@@ -15,11 +15,11 @@ NB: Use Reading from "Building StarWars Data Model" for this project
 
     > API LIVE "/"
 
-- admin.py = GUI una aplicación GUI para poder revisar todo que está dentro de nuestra bbdd sin tener que escribir mucho código  
+- admin.py = GUI in order to more easily see and edit our database   
 
     > DATABASE GUI "/admin"
 
-- wsgi.py = importa la aplicación y ejecuta una condicional 
+- wsgi.py = imports the application and executes a conditional  
 
 
 
@@ -56,13 +56,21 @@ NB: Use Reading from "Building StarWars Data Model" for this project
 
 
 
+/// PIPENV COMMANDS ///
 
+- pipenv init = starts up pipenv 
+
+- pipenv run migrate = like git commit --> commands we use when add new tables or modify tables 
+
+    > don't include versions in this until very end when finished 
+  
+- pipenv run upgrade = like git push 
 
 ---------------------------------------
 
 * URL: (https://docs.google.com/document/d/14WOnDcRt2hQ9ShsJHmgdsnFIjM2d4B0ji04wxJFCIFk/edit#heading=h.pf589isj2cuo)
     
-    > Section on 'Select' has everything we need to makeour GET request. 
+    > Section on 'Select' has everything we need to make our GET request. 
     
     @app.route...(GET)
     def handle_hello():
@@ -71,13 +79,6 @@ NB: Use Reading from "Building StarWars Data Model" for this project
     print(user)
     return jsonify
 
-*   pipenv run migrate = like git commit --> commands we use when add new tables or modif tables 
-    pipenv run upgrade = like git push 
-
-pipenv run init;
-pipenv run migrate;
-pipenv run upgrade;
-
 * migrations folder = stores our tables and versions, creates version history --> don't upload migrations to github!!!
 
 
@@ -85,4 +86,3 @@ GASTON ADVICE:
 - Plan bien las tablas y cómo se interconectan 
 - Añade las categorias a la vez, no añadas más luego 
 - can create DB via Postman o API Live GUI 
-- 

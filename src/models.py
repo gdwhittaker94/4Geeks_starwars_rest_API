@@ -1,8 +1,13 @@
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
-# unique=True = has to be unique
-# nullable=False = can't be ignored 
+# 'unique=True' = has to be unique
+# 'nullable=False' = can't be ignored 
+
+# def __repr__(self): = what prints out in terminal + how table data is visualised in /admin 
+# def serialize(self): = allows us to convert the query object we get from flask into 
+#  a dictionary and then into a JSON object 
+
 
 class Users(db.Model):
     __tablename__ = 'users'
@@ -14,6 +19,17 @@ class Users(db.Model):
 
     def __repr__(self): 
         return '<id: {}, Name: {}>'.format(self.id, self.name) 
+
+    # what we will see when we employ the serialize function (returns a dictionary) 
+    def serialize(self):  # 'self' = this user 
+        return {
+            "id": self.id,
+            "name": self.name,
+            "country": self.country,
+            "birthday": self.birthday,
+            "email": self.email
+            # do not serialize the password, its a security breach
+        }
 
 class Vehicles(db.Model):
     __tablename__ = 'vehicles'
@@ -32,6 +48,23 @@ class Vehicles(db.Model):
 
     def __repr__(self): 
         return '<id: {}, Name: {}>'.format(self.id, self.name)
+    
+    # what we will see when we employ the serialize function (returns a dictionary) 
+    def serialize(self):  # 'self' = this user 
+        return {
+            "id": self.id,
+            "name": self.name,
+            "model": self.model,
+            "vehicle_class": self.vehicle_class,
+            "manufacturer": self.manufacturer,
+            "consumables": self.consumables,
+            "cost_in_credits": self.cost_in_credits,
+            "crew": self.crew,
+            "length": self.length,
+            "crew": self.crew,
+            "max_atmosphering_speed": self.max_atmosphering_speed,
+            "cargo_capacity": self.cargo_capacity
+        }
 
 class Planets(db.Model):
     __tablename__ = 'planets'
@@ -48,6 +81,20 @@ class Planets(db.Model):
     def __repr__(self): 
         return '<id: {}, Name: {}>'.format(self.id, self.name) 
 
+    # what we will see when we employ the serialize function (returns a dictionary) 
+    def serialize(self):  # 'self' = this user 
+        return {
+            "id": self.id,
+            "name": self.name,
+            "diameter": self.diameter,
+            "rotation_period": self.rotation_period,
+            "orbital_period": self.orbital_period,
+            "population": self.population,
+            "surface_water": self.surface_water,
+            "climate": self.climate,
+            "terrain": self.terrain
+        }
+
 class Characters(db.Model):
     __tablename__ = 'characters'
     id = db.Column(db.Integer, primary_key=True)
@@ -59,6 +106,21 @@ class Characters(db.Model):
     eye_color = db.Column(db.String(50))
     birth_year = db.Column(db.String(50))
 
+    def __repr__(self): 
+        return '<id: {}, Name: {}>'.format(self.id, self.name) 
+    
+    # what we will see when we employ the serialize function (returns a dictionary) 
+    def serialize(self):  # 'self' = this user 
+        return {
+            "id": self.id,
+            "name": self.name,
+            "gender": self.gender,
+            "height": self.height,
+            "mass": self.mass,
+            "hair_color": self.hair_color,
+            "eye_color": self.eye_color,
+            "birth_year": self.birth_year,
+        }
     
 class Favorite_Planets(db.Model):
     __tablename__ = 'favorite_planets'
@@ -72,7 +134,7 @@ class Favorite_Characters(db.Model):
     __tablename__ = 'favorite_characters'
     id = db.Column(db.Integer, primary_key=True)
     character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
-    character_relationship = db.relationship(Characters)              # not a col, tells PC where to find col
+    character_relationship = db.relationship(Characters)           # not a col, tells PC where to find col
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user_relationship = db.relationship(Users)
 
@@ -81,7 +143,7 @@ class Favorite_Vehicles(db.Model):
     __tablename__ = 'favorite_vehicles'
     id = db.Column(db.Integer, primary_key=True)
     vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicles.id'))
-    vehicle_relationship = db.relationship(Vehicles)                 # not a col, tells PC where to find col
+    vehicle_relationship = db.relationship(Vehicles)               # not a col, tells PC where to find col
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user_relationship = db.relationship(Users)
 
