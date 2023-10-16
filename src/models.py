@@ -16,6 +16,7 @@ class Users(db.Model):
     country = db.Column(db.String(50))
     birthday = db.Column(db.String(50))
     email = db.Column(db.String(50), unique=True)
+    password = db.Column(db.String(50))
 
     def __repr__(self): 
         return '<id: {}, Name: {}>'.format(self.id, self.name) 
@@ -27,7 +28,8 @@ class Users(db.Model):
             "name": self.name,
             "country": self.country,
             "birthday": self.birthday,
-            "email": self.email
+            "email": self.email,
+            "password": self.password
             # do not serialize the password, its a security breach
         }
 
@@ -42,7 +44,6 @@ class Vehicles(db.Model):
     cost_in_credits = db.Column(db.Integer)
     crew = db.Column(db.Integer)
     length = db.Column(db.Float)
-    crew = db.Column(db.Integer)
     max_atmosphering_speed = db.Column(db.Integer)
     cargo_capacity = db.Column(db.Integer)
 

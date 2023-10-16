@@ -39,10 +39,10 @@ def generate_sitemap(app):
         <img src="https://wikiwandv2-19431.kxcdn.com/_next/image?url=https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Star_Wars_Logo.svg/langes-1500px-Star_Wars_Logo.svg.png&w=1200&q=50" width="325" height="200" alt="Star Wars Logo" style="margin-bottom: 10px">
         <br>
         <h1 style="color: yellow">The API Awakens</h1>
-        <p style="font-size: 18px">API HOST: <script>document.write('<input style="padding: 5px; width: 300px" type="text" value="'+window.location.href+'" />');</script></p>
-        <p style="font-size: 18px">Start working on your proyect by following the <a href="https://start.4geeksacademy.com/starters/flask" target="_blank">Quick Start</a></p>
-        <p style="font-size: 18px">Remember to specify a real endpoint path like: </p>
-        <ul style="text-align: center; list-style-type: none; font-size: 18px">"""+links_html+"</ul></div></body>"
+        <p style="font-size: 18px">API HOST: <br><script>document.write('<input style="padding: 5px; width: 300px; margin-top: 10px" type="text" value="'+window.location.href+'" />');</script></p>
+        <p style="font-size: 18px"><a href="https://start.4geeksacademy.com/starters/flask" target="_blank" style="color:white">Quick Start Guide</a></p>
+        <p style="font-size: 18px">The endpoints: </p>
+        <ul style="text-align: center; list-style-type: none; font-size: 18px; padding: 0">"""+links_html+"</ul></div></body>"
 
     # Parte visual del API live 
     # All styles have to be inline here 

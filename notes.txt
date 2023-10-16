@@ -1,7 +1,7 @@
 NB: Use Reading from "Building StarWars Data Model" for this project
 
 
-/// LOS ARCHIVOS ///
+/// MAIN FILES EXPLAINER ///
 
 - app.py = where we save our endpoints + where our data is shown on the screen  
 
@@ -23,16 +23,6 @@ NB: Use Reading from "Building StarWars Data Model" for this project
 
 
 
-/// API LIVE PAGE /// 
-
-- 'pipenv run start' = starts API live (NB: change visibility to public for Postman access)
-    > API live is set to "/" endpoint and comes from a function in utils.py 
-
-- on left of page = endpoints 
-
-- API host = basepoint for the endpoints, similar to SWAPI.tech 
-
-
 /// PSQL (VIEW DATABASE IN TERMINAL) ///
 
 - 'psql -h localhost -p <portNumber> example -U gitpod' = what we need to access the database 
@@ -48,6 +38,7 @@ NB: Use Reading from "Building StarWars Data Model" for this project
     > 'example=# \q' = exits psql
 
 
+
 /// PIPFILE (VIEW DATABASE VIUSALLY) ///
 
 - Inside API Live click "/admin" or enter API url/admin to see visual database 
@@ -58,11 +49,19 @@ NB: Use Reading from "Building StarWars Data Model" for this project
 
 /// PIPENV COMMANDS ///
 
+- pipenv run start = starts API live
+
+    > NB: change visibility to public for Postman access
+    > API live is set to "/" endpoint and comes from a function in utils.py 
+    > In middle of page = endpoints 
+    > "API host" = basepoint for the endpoints, similar to SWAPI.tech 
+
 - pipenv init = starts up pipenv 
 
-- pipenv run migrate = like git commit --> commands we use when add new tables or modify tables 
+- pipenv run migrate = like git commit 
 
-    > don't include versions in this until very end when finished 
+    > use this command each time you alter the models.py file  
+    > don't include versions in this until very end when finished (as can cause conflicts between projects)
   
 - pipenv run upgrade = like git push 
 
@@ -71,18 +70,65 @@ NB: Use Reading from "Building StarWars Data Model" for this project
 * URL: (https://docs.google.com/document/d/14WOnDcRt2hQ9ShsJHmgdsnFIjM2d4B0ji04wxJFCIFk/edit#heading=h.pf589isj2cuo)
     
     > Section on 'Select' has everything we need to make our GET request. 
-    
-    @app.route...(GET)
-    def handle_hello():
-    # SELECT * FROM user where ID = 1
-    user = User.query.get(1);
-    print(user)
-    return jsonify
-
+  
 * migrations folder = stores our tables and versions, creates version history --> don't upload migrations to github!!!
 
 
-GASTON ADVICE: 
-- Plan bien las tablas y cómo se interconectan 
+NOTAS DE CLASE: 
+
 - Añade las categorias a la vez, no añadas más luego 
-- can create DB via Postman o API Live GUI 
+- We can create DB via Postman o API Live GUI 
+
+- Tarea: 
+  + GET, POST, PUT (DELETE) para cada tabla 
+  + GET + POST de las tablas de favs
+
+Hay error en las instrucciones de 4 Geeks, debería ser así
+[GET] /users/<int:user_id>/favorites
+[POST] /favorite/<int:user_id/planet/<int:planet_id>
+
+Jose: 
+para mí, cuando queremos coger los favoritos del usuario, mi endpoint
+código tiene que consultar los 3 tablas y coger todos los favoritos 
+relacionados con un usuario 
+
+
+----------------------------------------
+TODO:
+
+* USER
+    - GET 1 user x
+    - GET ALL users x
+    - POST x
+    - PUT x
+    - DELETE x
+
+* PLANETS 
+    - GET 1 planet x
+    - GET ALL planets x
+    - POST x
+    - PUT x
+    - DELETE x
+
+* VEHICLES 
+    - GET 1 vehicle x
+    - GET ALL vehicles x
+    - POST x
+    - PUT x
+    - DELETE x
+
+* MONDAY: COPY VEHICLES POST/PUT/DELETE and edit for characters
+- then need to think about favorites endpoints/tables?
+
+* CHARACTERS 
+    - GET 1 character x
+    - GET ALL characters x
+    - POST 
+    - PUT 
+    - DELETE 
+
+* USER FAVORITES 
+    - GET 1 user favs (planets, vehicles, chars)
+    - GET ALL user favs (planets, vehicles, chars)
+    - POST 
+    - DELETE 
