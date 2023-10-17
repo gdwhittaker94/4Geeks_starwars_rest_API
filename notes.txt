@@ -117,15 +117,12 @@ TODO:
     - PUT x
     - DELETE x
 
-* MONDAY: COPY VEHICLES POST/PUT/DELETE and edit for characters
-- then need to think about favorites endpoints/tables?
-
 * CHARACTERS 
     - GET 1 character x
     - GET ALL characters x
-    - POST 
-    - PUT 
-    - DELETE 
+    - POST x
+    - PUT x
+    - DELETE x
 
 * USER FAVORITES 
     - GET 1 user favs (planets, vehicles, chars)

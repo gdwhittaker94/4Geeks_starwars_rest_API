@@ -51,7 +51,7 @@ class Vehicles(db.Model):
         return '<id: {}, Name: {}>'.format(self.id, self.name)
     
     # what we will see when we employ the serialize function (returns a dictionary) 
-    def serialize(self):  # 'self' = this user 
+    def serialize(self):  # 'self' = this table 
         return {
             "id": self.id,
             "name": self.name,
@@ -83,7 +83,7 @@ class Planets(db.Model):
         return '<id: {}, Name: {}>'.format(self.id, self.name) 
 
     # what we will see when we employ the serialize function (returns a dictionary) 
-    def serialize(self):  # 'self' = this user 
+    def serialize(self):  # 'self' = this table 
         return {
             "id": self.id,
             "name": self.name,
@@ -111,7 +111,7 @@ class Characters(db.Model):
         return '<id: {}, Name: {}>'.format(self.id, self.name) 
     
     # what we will see when we employ the serialize function (returns a dictionary) 
-    def serialize(self):  # 'self' = this user 
+    def serialize(self):  # 'self' = this table 
         return {
             "id": self.id,
             "name": self.name,
@@ -126,27 +126,50 @@ class Characters(db.Model):
 class Favorite_Planets(db.Model):
     __tablename__ = 'favorite_planets'
     id = db.Column(db.Integer, primary_key=True)
-    planet_id = db.Column(db.Integer, db.ForeignKey('planets.id'))
-    planet_relationship = db.relationship(Planets)                 # not a col, tells PC where to find col
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user_relationship = db.relationship(Users)
+    user = db.relationship(Users)
+    planet_id = db.Column(db.Integer, db.ForeignKey('planets.id'))
+    planet = db.relationship(Planets) # not a col, tells PC where to find col
+
+    # what we will see when we employ the serialize function (returns a dictionary) 
+    def serialize(self):  # 'self' = this table 
+        return {
+            "id": self.id,
+            "user_id": self.user,
+            "planet": self.planet,
+        }
 
 class Favorite_Characters(db.Model):
     __tablename__ = 'favorite_characters'
     id = db.Column(db.Integer, primary_key=True)
-    character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
-    character_relationship = db.relationship(Characters)           # not a col, tells PC where to find col
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user_relationship = db.relationship(Users)
-
-
+    user = db.relationship(Users)
+    character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
+    character = db.relationship(Characters) # not a col, tells PC where to find col
+    
+    # what we will see when we employ the serialize function (returns a dictionary) 
+    def serialize(self):  # 'self' = this table 
+        return {
+            "id": self.id,
+            "user_id": self.user,
+            "character": self.character,
+        }
+    
 class Favorite_Vehicles(db.Model):
     __tablename__ = 'favorite_vehicles'
     id = db.Column(db.Integer, primary_key=True)
-    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicles.id'))
-    vehicle_relationship = db.relationship(Vehicles)               # not a col, tells PC where to find col
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user_relationship = db.relationship(Users)
+    user = db.relationship(Users)
+    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicles.id'))
+    vehicle = db.relationship(Vehicles) # not a col, tells PC where to find col
+    
+    # what we will see when we employ the serialize function (returns a dictionary) 
+    def serialize(self):  # 'self' = this table 
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "vehicle": self.vehicle,
+        }
 
 # DEFAULT 
 # class User(db.Model):

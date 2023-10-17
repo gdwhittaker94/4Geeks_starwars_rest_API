@@ -11,7 +11,7 @@ from flask_cors import CORS
 # generates the API Live page
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, Users, Planets, Vehicles, Characters
+from models import db, Users, Planets, Vehicles, Characters, Favorite_Characters, Favorite_Planets, Favorite_Vehicles
 # from models import Person
 
 app = Flask(__name__)
@@ -65,7 +65,8 @@ def handle_oneUser(user_id):  # user_id = <int: user_id>
 # GET ALL USERS
 @app.route('/users', methods=['GET'])
 def handle_manyUsers():
-    users = Users.query.all()  # SQL Equiv. = SELECT * FROM User
+    # SQL Equiv. = SELECT * FROM User
+    users = Users.query.all()  
     users_serialize = list(map(lambda x: x.serialize(), users))
     return jsonify({'msg': 'ok', 'info': users_serialize})
 
@@ -359,8 +360,6 @@ def handle_oneCharacter(character_id):  # characters_id = <int: characters_id>
     return jsonify({'msg': 'ok', 'info': characters_serialize}), 200
 
 # GET ALL CHARACTERS
-
-
 @app.route('/characters', methods=['GET'])
 def handle_manyCharacter():
     characters = Characters.query.all()  # SQL Equiv. = SELECT * FROM User
@@ -368,6 +367,104 @@ def handle_manyCharacter():
     return jsonify({'msg': 'ok', 'info': characters_serialize})
 
 
+# POST (CREATE) 1 CHARACTER
+@app.route('/characters', methods=['POST'])
+def create_character():
+    # Handle errors
+    body = request.get_json(silent=True)
+    if body is None:
+        return jsonify({'error': 'You must send information with the body'}), 400
+    if 'name' not in body:
+        return jsonify({'error': 'You must give the character a name'}), 400
+
+    # SQL Equiv. = INSERT INTO character(name, ...) VALUES ('example', ...)
+    new_character = Characters()
+    new_character.name = body['name']
+    new_character.gender = body['gender']
+    new_character.height = body['height']
+    new_character.mass = body['mass']
+    new_character.hair_color = body['hair_color']
+    new_character.eye_color = body['eye_color']
+    new_character.birth_year = body['birth_year']
+
+    db.session.add(new_character) # adds new user to db
+    db.session.commit() # like git commit, saves changes
+
+    return jsonify({'msg': 'ok'}), 200
+
+
+# PUT (UPDATE) 1 CHARACTER
+@app.route('/characters/<int:character_id>', methods=['PUT'])
+def update_character(character_id):
+
+    # SQL Equiv. = SELECT * FROM Planets where ID = 1
+    character = Characters.query.get(character_id)
+    # Handle errors
+    if character is None:
+        return jsonify({'error': 'The character with id {} doesn\'t exist'.format(character_id)}), 400
+
+    # Handle errors 
+    body = request.get_json(silent=True)
+    if body is None:
+        return jsonify({'error': 'You must send information with the body'}), 400
+    # Update relevant categories 
+    if "name" in body:
+        character.name = body['name']
+    if "gender" in body:
+        character.gender = body['gender']
+    if "height" in body:
+        character.height = body['height']
+    if "mass" in body:
+        character.mass = body['mass']
+    if "hair_color" in body:
+        character.hair_color = body['hair_color']
+    if "eye_color" in body:
+        character.eye_color = body['eye_color']
+    if "birth_year" in body:
+        character.birth_year = body['birth_year']
+
+    db.session.commit()
+    return jsonify({'msg': 'ok'}), 200
+
+# DELETE 1 CHARACTER
+@app.route('/characters/<int:character_id>', methods=['DELETE'])
+def delete_character(character_id):
+    character = Characters.query.get(character_id)
+
+    # Handle errors
+    if character is None:
+        return jsonify({'error': 'The character with id {} doesn\'t exist'.format(character_id)}), 400
+    
+    db.session.delete(character)
+    db.session.commit()
+    return jsonify({'msg': 'ok'}), 200
+
+
+# ### ENDPOINTS "/favorites" ###
+
+# GET 1 USER FAVS
+@app.route('/users/<int:user_id>/favorites', methods=['GET'])
+def handle_userFavs(user_id):  # user_id = <int: user_id>
+
+    ## SQL Equiv. = SELECT * FROM Users where ID = 1
+    user = Users.query.get(user_id)
+    # Handle errors
+    if user is None:
+        return jsonify({'error': 'The user with id {} doesn\'t exist'.format(user_id)}), 400
+    
+    # SQL Equiv. = SELECT * FROM favorite_x where user_id = 1
+    favorite_characters = Favorite_Characters.query.filter_by(user_id=user_id).all()
+    favorite_planets = Favorite_Planets.query.filter_by(user_id=user_id).all()
+    favorite_vehicles = Favorite_Vehicles.query.filter_by(user_id=user_id).all()
+
+    # Convert SQLAlchemy query results to dictionaries
+    favorites_object = {"characters": favorite_characters, "planets": favorite_planets, "vehicles": favorite_vehicles}
+    
+    return jsonify({'msg': 'ok', 'user': user, 'user_favorites': favorites_object}), 200
+
+
+
+# --------- END OF FILE -----------
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
     # if PORT in .env file has a value, use that value, if not use 3000
