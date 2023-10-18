@@ -58,17 +58,17 @@ def handle_oneUser(user_id):  # user_id = <int: user_id>
     # Handle errors
     if user is None:
         return jsonify({'error': 'The user with id {} doesn\'t exist'.format(user_id)}), 400
-    user_serialize = user.serialize()
-    return jsonify({'msg': 'ok', 'info': user_serialize}), 200
+    user_serialized = user.serialize()
+    return jsonify({'msg': 'ok', 'info': user_serialized}), 200
 
 
 # GET ALL USERS
 @app.route('/users', methods=['GET'])
 def handle_manyUsers():
-    # SQL Equiv. = SELECT * FROM User
+    # SQL Equiv. = SELECT * FROM Users
     users = Users.query.all()  
-    users_serialize = list(map(lambda x: x.serialize(), users))
-    return jsonify({'msg': 'ok', 'info': users_serialize})
+    users_serialized = list(map(lambda x: x.serialize(), users))
+    return jsonify({'msg': 'ok', 'info': users_serialized})
 
     # FILTERING USERS
     # SQL Equiv = SELECT * FROM users WHERE ... = True:
@@ -80,8 +80,9 @@ def handle_manyUsers():
 # POST (CREATE) 1 USER
 @app.route('/users', methods=['POST'])
 def create_user():
-    # Handle errors
+    # Extract JSON data 
     body = request.get_json(silent=True)
+    # Handle errors
     if body is None:
         return jsonify({'error': 'You must send information with the body'}), 400
     if 'name' not in body:
@@ -115,8 +116,9 @@ def update_user(user_id):
     if user is None:
         return jsonify({'error': 'The user with id {} doesn\'t exist'.format(user_id)}), 400
 
-    # Handle errors 
+    # Extract JSON data 
     body = request.get_json(silent=True)
+    # Handle errors
     if body is None:
         return jsonify({'error': 'You must send information with the body'}), 400
     # Update relevant categories 
@@ -159,21 +161,22 @@ def handle_onePlanet(planet_id):  # planet_id = <int: planet_id>
     # Handle errors
     if planet is None:
         return jsonify({'error': 'The planet with id {} doesn\'t exist'.format(planet_id)}), 400
-    planet_serialize = planet.serialize()
-    return jsonify({'msg': 'ok', 'info': planet_serialize}), 200
+    planet_serialized = planet.serialize()
+    return jsonify({'msg': 'ok', 'info': planet_serialized}), 200
 
 # GET ALL PLANETS
 @app.route('/planets', methods=['GET'])
 def handle_manyPlanets():
     planets = Planets.query.all()  # SQL Equiv. = SELECT * FROM User
-    planets_serialize = list(map(lambda x: x.serialize(), planets))
-    return jsonify({'msg': 'ok', 'info': planets_serialize})
+    planets_serialized = list(map(lambda x: x.serialize(), planets))
+    return jsonify({'msg': 'ok', 'info': planets_serialized})
 
 # POST (CREATE) 1 PLANET
 @app.route('/planets', methods=['POST'])
 def create_planet():
-    # Handle errors
+    # Extract JSON data 
     body = request.get_json(silent=True)
+    # Handle errors
     if body is None:
         return jsonify({'error': 'You must send information with the body'}), 400
     if 'name' not in body:
@@ -205,8 +208,9 @@ def update_planet(planet_id):
     if planet is None:
         return jsonify({'error': 'The planet with id {} doesn\'t exist'.format(planet_id)}), 400
 
-    # Handle errors 
+    # Extract JSON data 
     body = request.get_json(silent=True)
+    # Handle errors
     if body is None:
         return jsonify({'error': 'You must send information with the body'}), 400
     # Update relevant categories 
@@ -254,21 +258,22 @@ def handle_oneVehicle(vehicle_id):  # vehicles_id = <int: vehicles_id>
     # Handle errors
     if vehicles is None:
         return jsonify({'error': 'The vehicles with id {} doesn\'t exist'.format(vehicle_id)}), 400
-    vehicles_serialize = vehicles.serialize()
-    return jsonify({'msg': 'ok', 'info': vehicles_serialize}), 200
+    vehicles_serialized = vehicles.serialize()
+    return jsonify({'msg': 'ok', 'info': vehicles_serialized}), 200
 
 # GET ALL VEHICLES
 @app.route('/vehicles', methods=['GET'])
 def handle_manyVehicles():
     vehicles = Vehicles.query.all()  # SQL Equiv. = SELECT * FROM User
-    vehicles_serialize = list(map(lambda x: x.serialize(), vehicles))
-    return jsonify({'msg': 'ok', 'info': vehicles_serialize})
+    vehicles_serialized = list(map(lambda x: x.serialize(), vehicles))
+    return jsonify({'msg': 'ok', 'info': vehicles_serialized})
 
 # POST (CREATE) 1 VEHICLE
 @app.route('/vehicles', methods=['POST'])
 def create_vehicle():
-    # Handle errors
+    # Extract JSON data 
     body = request.get_json(silent=True)
+    # Handle errors
     if body is None:
         return jsonify({'error': 'You must send information with the body'}), 400
     if 'name' not in body:
@@ -303,8 +308,9 @@ def update_vehicle(vehicle_id):
     if vehicle is None:
         return jsonify({'error': 'The vehicle with id {} doesn\'t exist'.format(vehicle_id)}), 400
 
-    # Handle errors 
+    # Extract JSON data 
     body = request.get_json(silent=True)
+    # Handle errors
     if body is None:
         return jsonify({'error': 'You must send information with the body'}), 400
     # Update relevant categories 
@@ -356,22 +362,23 @@ def handle_oneCharacter(character_id):  # characters_id = <int: characters_id>
     # Handle errors
     if characters is None:
         return jsonify({'error': 'The characters with id {} doesn\'t exist'.format(character_id)}), 400
-    characters_serialize = characters.serialize()
-    return jsonify({'msg': 'ok', 'info': characters_serialize}), 200
+    characters_serialized = characters.serialize()
+    return jsonify({'msg': 'ok', 'info': characters_serialized}), 200
 
 # GET ALL CHARACTERS
 @app.route('/characters', methods=['GET'])
 def handle_manyCharacter():
     characters = Characters.query.all()  # SQL Equiv. = SELECT * FROM User
-    characters_serialize = list(map(lambda x: x.serialize(), characters))
-    return jsonify({'msg': 'ok', 'info': characters_serialize})
+    characters_serialized = list(map(lambda x: x.serialize(), characters))
+    return jsonify({'msg': 'ok', 'info': characters_serialized})
 
 
 # POST (CREATE) 1 CHARACTER
 @app.route('/characters', methods=['POST'])
 def create_character():
-    # Handle errors
+    # Extract JSON data 
     body = request.get_json(silent=True)
+    # Handle errors
     if body is None:
         return jsonify({'error': 'You must send information with the body'}), 400
     if 'name' not in body:
@@ -403,8 +410,9 @@ def update_character(character_id):
     if character is None:
         return jsonify({'error': 'The character with id {} doesn\'t exist'.format(character_id)}), 400
 
-    # Handle errors 
+    # Extract JSON data 
     body = request.get_json(silent=True)
+    # Handle errors 
     if body is None:
         return jsonify({'error': 'You must send information with the body'}), 400
     # Update relevant categories 
@@ -453,9 +461,37 @@ def handle_userFavs(user_id):  # user_id = <int: user_id>
         return jsonify({'error': 'The user with id {} doesn\'t exist'.format(user_id)}), 400
     
     # SQL Equiv. = SELECT * FROM favorite_x where user_id = 1
-    favorite_characters = Favorite_Characters.query.filter_by(user_id=user_id).all()
+    favorite_characters = Favorite_Characters.query.filter_by(user_id=user_id).join(Characters)
+    
     favorite_planets = Favorite_Planets.query.filter_by(user_id=user_id).all()
     favorite_vehicles = Favorite_Vehicles.query.filter_by(user_id=user_id).all()
+
+    # Convert SQLAlchemy query results to dictionaries 
+    favorite_characters_serialized = list(map(lambda favParam: favParam.serialize(), favorite_characters))
+
+    favorite_planets_serialized = list(map(lambda favParam: favParam.serialize(), favorite_planets))
+    favorite_vehicles_serialized = list(map(lambda favParam: favParam.serialize(), favorite_vehicles))
+
+
+    favorites_object = {"characters": favorite_characters_serialized, 
+                        "planets": favorite_planets_serialized, 
+                        "vehicles": favorite_vehicles_serialized}
+    
+    return jsonify({'msg': 'ok', 'user': user.serialize(), 'user_favorites': favorites_object}), 200
+
+
+# GET ALL USER FAVS
+@app.route('/users/favorites', methods=['GET'])
+def handle_allUserFavs():  # user_id = <int: user_id>
+
+    ## SQL Equiv. = SELECT * FROM Users
+    users = Users.query.all()
+    users_serialized = list(map(lambda x: x.serialize(), users))
+
+    # SQL Equiv. = SELECT * FROM favorite_x 
+    favorite_characters = Favorite_Characters.query.all()
+    favorite_planets = Favorite_Planets.query.all()
+    favorite_vehicles = Favorite_Vehicles.query.all()
 
     # Convert SQLAlchemy query results to dictionaries 
     favorite_characters_serialized = list(map(lambda favParam: favParam.serialize(), favorite_characters))
@@ -467,7 +503,74 @@ def handle_userFavs(user_id):  # user_id = <int: user_id>
                         "planets": favorite_planets_serialized, 
                         "vehicles": favorite_vehicles_serialized}
     
-    return jsonify({'msg': 'ok', 'user': user.serialize(), 'user_favorites': favorites_object}), 200
+    return jsonify({'msg': 'ok', 'users': users_serialized, 'users_favorites': favorites_object}), 200
+
+
+# POST (CREATE) NEW USER FAV
+@app.route('/users/<int:user_id>/favorites', methods=['POST'])
+def handle_addToUserFavs(user_id):  # user_id = <int: user_id>
+
+    ## SQL Equiv. = SELECT * FROM Users where ID = 1
+    user = Users.query.get(user_id)
+    # Handle errors
+    if user is None:
+        return jsonify({'error': 'You must specify an exisiting user'}), 400
+   
+    # Extract JSON data 
+    body = request.get_json(silent=True)
+    # Handle Errors
+    if body is None:
+        return jsonify({'error': 'You must send information with the body'}), 400
+    if 'user_id' not in body:
+        return jsonify({'error': 'You must specify the user_id of the user you want to target'}), 400
+    
+    if "character_id" or "planet_id" or "vehicle_id" not in body: 
+        return jsonify({'error': 'You must specify the id of the favorite (e.g. character_id: 1'}), 400
+
+    # SQL Equiv. = INSERT INTO favorite_x(name, ...) VALUES ('example', ...)
+    # Characters
+    if "character_id" in body:
+        new_fav_character = Favorite_Characters()
+        new_fav_character.user_id = body['user_id']
+        new_fav_character.character_id = body['character_id']
+
+        db.session.add(new_fav_character) # adds to db
+        db.session.commit() # like git commit, saves changes
+
+    # Planets
+    if "planet_id" in body: 
+        new_fav_planet = Favorite_Planets()
+        new_fav_planet.user_id = body['user_id']
+        new_fav_planet.planet_id = body['planet_id']
+
+        db.session.add(new_fav_planet) # adds to db
+        db.session.commit() # like git commit, saves changes
+
+    # Vehicles
+    if "vehicle_id" in body: 
+        new_fav_vehicle = Favorite_Vehicles()
+        new_fav_vehicle.user_id = body['user_id']
+        new_fav_vehicle.vehicle_id = body['vehicle_id']
+
+        db.session.add(new_fav_vehicle) # adds to db
+        db.session.commit() # like git commit, saves changes
+
+    return jsonify({'msg': 'Favorite added successfully'}), 200
+
+
+
+# DELETE USER FAV CHARACTER
+@app.route('/users/<int:user_id>/favorites/character/<int:fav_id>', methods=['DELETE'])
+def deleteUserFav(fav_id): 
+    fav_character = Favorite_Characters.query.get(fav_id)
+
+    # Handle errors
+    if fav_character is None:
+        return jsonify({'error': 'This favorite with id {} doesn\'t exist'.format(fav_id)}), 400
+
+    db.session.delete(fav_character)
+    db.session.commit()
+    return jsonify({'msg': 'Favorite deleted for this user'}), 200
 
 
 
