@@ -29,7 +29,6 @@ class Users(db.Model):
             "country": self.country,
             "birthday": self.birthday,
             "email": self.email,
-            "password": self.password
             # do not serialize the password, its a security breach
         }
 
@@ -135,8 +134,8 @@ class Favorite_Planets(db.Model):
     def serialize(self):  # 'self' = this table 
         return {
             "id": self.id,
-            "user_id": self.user,
-            "planet": self.planet,
+            "user_id": self.user_id,
+            "planet": self.planet_id,
         }
 
 class Favorite_Characters(db.Model):
@@ -151,8 +150,8 @@ class Favorite_Characters(db.Model):
     def serialize(self):  # 'self' = this table 
         return {
             "id": self.id,
-            "user_id": self.user,
-            "character": self.character,
+            "user_id": self.user_id,
+            "character": self.character_id,
         }
     
 class Favorite_Vehicles(db.Model):
@@ -168,7 +167,7 @@ class Favorite_Vehicles(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
-            "vehicle": self.vehicle,
+            "vehicle": self.vehicle_id,
         }
 
 # DEFAULT 

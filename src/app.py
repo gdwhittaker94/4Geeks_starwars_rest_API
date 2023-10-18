@@ -457,10 +457,17 @@ def handle_userFavs(user_id):  # user_id = <int: user_id>
     favorite_planets = Favorite_Planets.query.filter_by(user_id=user_id).all()
     favorite_vehicles = Favorite_Vehicles.query.filter_by(user_id=user_id).all()
 
-    # Convert SQLAlchemy query results to dictionaries
-    favorites_object = {"characters": favorite_characters, "planets": favorite_planets, "vehicles": favorite_vehicles}
+    # Convert SQLAlchemy query results to dictionaries 
+    favorite_characters_serialized = list(map(lambda favParam: favParam.serialize(), favorite_characters))
+    favorite_planets_serialized = list(map(lambda favParam: favParam.serialize(), favorite_planets))
+    favorite_vehicles_serialized = list(map(lambda favParam: favParam.serialize(), favorite_vehicles))
+
+
+    favorites_object = {"characters": favorite_characters_serialized, 
+                        "planets": favorite_planets_serialized, 
+                        "vehicles": favorite_vehicles_serialized}
     
-    return jsonify({'msg': 'ok', 'user': user, 'user_favorites': favorites_object}), 200
+    return jsonify({'msg': 'ok', 'user': user.serialize(), 'user_favorites': favorites_object}), 200
 
 
 
