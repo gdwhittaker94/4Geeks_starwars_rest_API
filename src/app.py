@@ -461,7 +461,7 @@ def handle_userFavs(user_id):  # user_id = <int: user_id>
         return jsonify({'error': 'The user with id {} doesn\'t exist'.format(user_id)}), 400
     
     # SQL Equiv. = SELECT * FROM favorite_x where user_id = 1
-    favorite_characters = Favorite_Characters.query.filter_by(user_id=user_id).join(Characters)
+    favorite_characters = Favorite_Characters.query.join(Characters.id==Favorite_Characters.character_id)
     
     favorite_planets = Favorite_Planets.query.filter_by(user_id=user_id).all()
     favorite_vehicles = Favorite_Vehicles.query.filter_by(user_id=user_id).all()
