@@ -458,32 +458,17 @@ def handle_userFavs(user_id):  # user_id = <int: user_id>
     favorite_characters = db.session.query(Favorite_Characters, Characters).join(Characters).filter(Favorite_Characters.user_id == user_id).all()
     favorite_characters_serialized = []
     for favorite_item, character_item in favorite_characters:
-        favorite_characters_serialized.append({'user_email': user.email, 'favorite_character_id': favorite_item.id, 
-                                               'character_info': character_item.serialize()})
+        favorite_characters_serialized.append({'favorite_character_id': favorite_item.id,'character_info': character_item.serialize()})
     # Planets
     favorite_planets = db.session.query(Favorite_Planets, Planets).join(Planets).filter(Favorite_Planets.user_id == user_id).all()
     favorite_planets_serialized = []
     for favorite_item, planet_item in favorite_planets:
-        favorite_planets_serialized.append({'user_email': user.email, 'favorite_planet_id': favorite_item.id, 
-                                               'planet_info': planet_item.serialize()})
+        favorite_planets_serialized.append({'favorite_planet_id': favorite_item.id,'planet_info': planet_item.serialize()})
     # Vehicles
     favorite_vehicles = db.session.query(Favorite_Vehicles, Vehicles).join(Vehicles).filter(Favorite_Vehicles.user_id == user_id).all()
     favorite_vehicles_serialized = []
     for favorite_item, vehicle_item in favorite_vehicles:
-        favorite_vehicles_serialized.append({'user_email': user.email, 'favorite_vehicle_id': favorite_item.id, 
-                                               'vehicle_info': vehicle_item.serialize()})
-
-    print(favorite_characters)
-    print(favorite_characters_serialized)
-
-       # Convert SQLAlchemy query results to dictionaries
-    favorite_characters_serialized = list(
-        map(lambda favParam: favParam.serialize(), favorite_characters))
-
-    favorite_planets_serialized = list(
-        map(lambda favParam: favParam.serialize(), favorite_planets))
-    favorite_vehicles_serialized = list(
-        map(lambda favParam: favParam.serialize(), favorite_vehicles))
+        favorite_vehicles_serialized.append({'favorite_vehicle_id': favorite_item.id,'vehicle_info': vehicle_item.serialize()})
 
     favorites_object = {"characters": favorite_characters_serialized,
                         "planets": favorite_planets_serialized,
@@ -491,38 +476,79 @@ def handle_userFavs(user_id):  # user_id = <int: user_id>
 
     return jsonify({'msg': 'ok', 'user': user.serialize(), 'user_favorites': favorites_object}), 200
 
-
 # GET ALL USER FAVS
 @app.route('/users/favorites', methods=['GET'])
 def handle_allUserFavs():  # user_id = <int: user_id>
 
     # SQL Equiv. = SELECT * FROM Users
     users = Users.query.all()
-    users_serialized = list(map(lambda x: x.serialize(), users))
+    users_favorites = []
 
-    # SQL Equiv. = SELECT * FROM favorite_x
-    favorite_characters = Favorite_Characters.query.all()
-    favorite_planets = Favorite_Planets.query.all()
-    favorite_vehicles = Favorite_Vehicles.query.all()
+    for user in users:  
+        user_id = user.id
+        user_favs= {
+            'user_info': user.serialize(),
+            'favorites': {
+                'characters': [],
+                'planets': [],
+                'vehicles': []
+            }
+        }
 
-    # Convert SQLAlchemy query results to dictionaries
-    favorite_characters_serialized = list(
-        map(lambda favParam: favParam.serialize(), favorite_characters))
-    favorite_planets_serialized = list(
-        map(lambda favParam: favParam.serialize(), favorite_planets))
-    favorite_vehicles_serialized = list(
-        map(lambda favParam: favParam.serialize(), favorite_vehicles))
+     # SQL Equivalent = SELECT * FROM favorite_x where user_id = <user_id>
+        favorite_characters = db.session.query(Favorite_Characters, Characters).join(Characters).filter(Favorite_Characters.user_id == user_id).all()
+        for favorite_item, character_item in favorite_characters:
+            user_favs['favorites']['characters'].append({
+                'favorite_character_id': favorite_item.id,
+                'character_info': character_item.serialize()
+            })
 
-    favorites_object = {"characters": favorite_characters_serialized,
-                        "planets": favorite_planets_serialized,
-                        "vehicles": favorite_vehicles_serialized}
+        favorite_planets = db.session.query(Favorite_Planets, Planets).join(Planets).filter(Favorite_Planets.user_id == user_id).all()
+        for favorite_item, planet_item in favorite_planets:
+            user_favs['favorites']['planets'].append({
+                'favorite_planet_id': favorite_item.id,
+                'favorite_planet': planet_item.serialize()
+            })
 
-    return jsonify({'msg': 'ok', 'users': users_serialized, 'users_favorites': favorites_object}), 200
+        favorite_vehicles = db.session.query(Favorite_Vehicles, Vehicles).join(Vehicles).filter(Favorite_Vehicles.user_id == user_id).all()
+        for favorite_item, vehicle_item in favorite_vehicles:
+            user_favs['favorites']['vehicles'].append({
+                'favorite_vehicle_id': favorite_item.id,
+                'vehicle_info': vehicle_item.serialize()
+            })
+
+        users_favorites.append(user_favs)
+
+    return jsonify({'msg': 'ok', 'users_favorites': users_favorites}), 200
+
+    # users_serialized = list(map(lambda x: x.serialize(), users))
+
+    # # SQL Equiv. = SELECT * FROM favorite_x
+    # favorite_characters = Favorite_Characters.query.all()
+    # favorite_planets = Favorite_Planets.query.all()
+    # favorite_vehicles = Favorite_Vehicles.query.all()
+
+    # # Convert SQLAlchemy query results to dictionaries
+    # favorite_characters_serialized = list(
+    #     map(lambda favParam: favParam.serialize(), favorite_characters))
+    # favorite_planets_serialized = list(
+    #     map(lambda favParam: favParam.serialize(), favorite_planets))
+    # favorite_vehicles_serialized = list(
+    #     map(lambda favParam: favParam.serialize(), favorite_vehicles))
+
+    # favorites_object = {"characters": favorite_characters_serialized,
+    #                     "planets": favorite_planets_serialized,
+    #                     "vehicles": favorite_vehicles_serialized}
+
+    # return jsonify({'msg': 'ok', 'users': users_serialized, 'users_favorites': favorites_object}), 200
 
 
 # POST (CREATE) NEW USER FAV
 @app.route('/users/<int:user_id>/favorites', methods=['POST'])
 def handle_addToUserFavs(user_id):  # user_id = <int: user_id>
+
+    # 3 posts
+
 
     # SQL Equiv. = SELECT * FROM Users where ID = 1
     user = Users.query.get(user_id)
