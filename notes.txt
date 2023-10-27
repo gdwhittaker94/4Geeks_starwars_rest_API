@@ -126,6 +126,6 @@ TODO:
 
 * USER FAVORITES 
     - GET 1 user favs (planets, vehicles, chars) X
-    - GET ALL user favs (planets, vehicles, chars) X
+    - GET ALL user favs (planets, vehicles, chars) 
     - POST 
     - DELETE 
