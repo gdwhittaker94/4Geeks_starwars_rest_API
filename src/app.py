@@ -523,7 +523,7 @@ def handle_allUserFavs():  # user_id = <int: user_id>
 
 # POST (CREATE) NEW USER FAV CHARACTER
 @app.route('/users/<int:user_id>/favorites/character', methods=['POST'])
-def handle_addToUserFavs(user_id):  # user_id = <int: user_id>
+def handle_addCharToUserFavs(user_id):  # user_id = <int: user_id>
 
     # 1. Dealing with incoming JSON
     body = request.get_json(silent=True)
@@ -541,72 +541,120 @@ def handle_addToUserFavs(user_id):  # user_id = <int: user_id>
         return jsonify({'error': 'You must specify an exisiting user'}), 400
 
     # 3. Check Character is Correct
-     # SQL Equiv. = SELECT * FROM Characters where character name = body['character_name']
-    favorite_character = Characters.query.get(body['character_name'])
-    print(favorite_character)
+    # SQL Equiv. = SELECT * FROM Characters where character name = body['character_name']
+    favorite_character = Characters.query.filter_by(name=body['character_name']).first()
     if favorite_character is None:
         return jsonify({'error': 'You must specify an exisiting character'}), 400
     
-    # have checked a correct character has been specified
-    # now need to link name of character with their id, in order to add that id to favorite character table
-    favorite_character_id = favorite_character.id???
+    # once checked, now need to get character's id in order to add it to Favorite_Characters table
+    favorite_character_id = favorite_character.id
 
     # 4. Now all is correct, add this character to user's list of favorite characters 
     new_fav_character = Favorite_Characters()
-    new_fav_character.user_id = body['user_id']
-    new_fav_character.character_id = body['character_id']
+    new_fav_character.user_id = user_id
+    new_fav_character.character_id = favorite_character_id
 
     db.session.add(new_fav_character)  # adds to db
     db.session.commit()  # like git commit, saves changes
-
-
-
-    favorite_character = db.session.query(Favorite_Characters, Characters).join(Characters).filter(Favorite_Characters.user_id == user_id).all()
+    
+    # For JSON Reply
+    favorite_characters = db.session.query(Favorite_Characters, Characters).join(Characters).filter(Favorite_Characters.user_id == user_id).all()
+    favorite_characters_serialized = []
     for favorite_item, character_item in favorite_characters:
-        user_favs['favorites']['characters'].append({
-            'favorite_character_id': favorite_item.id,
-            'character_info': character_item.serialize()
-        })
+        favorite_characters_serialized.append({'favorite_character_id': favorite_item.id,'character_info': character_item.serialize()})
 
-
-    return 
+    return jsonify({'msg': 'Favorite added', 'Favorite_Characters': favorite_characters_serialized}), 200
    
+# POST (CREATE) NEW USER FAV PLANET
+@app.route('/users/<int:user_id>/favorites/planet', methods=['POST'])
+def handle_addPlanetToUserFavs(user_id):  # user_id = <int: user_id>
 
-# jose: 3 posts
+    # 1. Dealing with incoming JSON
+    body = request.get_json(silent=True)
+    # Handle Errors
+    if body is None:
+        return jsonify({'error': 'You must include a body in the request'}), 400
+    if 'planet_name' not in body:
+        return jsonify({'error': 'You must specify the "planet_name" to add to this users favorites'}), 400
 
-# --------------------------------------------- OLF CODE
-    return 
+    # 2. Check User is Correct
+    # SQL Equiv. = SELECT * FROM Users where ID = 1
+    user = Users.query.get(user_id)
+    # Handle errors
+    if user is None:
+        return jsonify({'error': 'You must specify an exisiting user'}), 400
+
+    # 3. Check Planet is Correct
+    # SQL Equiv. = SELECT * FROM Planets where planet name = body['planet_name']
+    favorite_planet = Planets.query.filter_by(name=body['planet_name']).first()
+    if favorite_planet is None:
+        return jsonify({'error': 'You must specify an exisiting planet'}), 400
     
+    # once checked, now need to get planet's id in order to add it to Favorite_Planets table
+    favorite_planet_id = favorite_planet.id
 
+    # 4. Now all is correct, add this planet to user's list of favorite planets 
+    new_fav_planet = Favorite_Planets()
+    new_fav_planet.user_id = user_id
+    new_fav_planet.planet_id = favorite_planet_id
+
+    db.session.add(new_fav_planet)  # adds to db
+    db.session.commit()  # like git commit, saves changes
     
+    # For JSON Reply
+    favorite_planets = db.session.query(Favorite_Planets, Planets).join(Planets).filter(Favorite_Planets.user_id == user_id).all()
+    favorite_planets_serialized = []
+    for favorite_item, planet_item in favorite_planets:
+        favorite_planets_serialized.append({'favorite_planet_id': favorite_item.id,'planet_info': planet_item.serialize()})
 
-    if "character_id" or "planet_id" or "vehicle_id" not in body:
-        return jsonify({'error': 'You must specify the id of the favorite (e.g. character_id: 1'}), 400
+    return jsonify({'msg': 'Favorite added', 'Favorite_Planets': favorite_planets_serialized}), 200
+   
+# POST (CREATE) NEW USER FAV VEHICLE
+@app.route('/users/<int:user_id>/favorites/vehicle', methods=['POST'])
+def handle_addVehicleToUserFavs(user_id):  # user_id = <int: user_id>
 
-    # SQL Equiv. = INSERT INTO favorite_x(name, ...) VALUES ('example', ...)
-    # Characters
+    # 1. Dealing with incoming JSON
+    body = request.get_json(silent=True)
+    # Handle Errors
+    if body is None:
+        return jsonify({'error': 'You must include a body in the request'}), 400
+    if 'vehicle_name' not in body:
+        return jsonify({'error': 'You must specify the "vehicle_name" to add to this users favorites'}), 400
+
+    # 2. Check User is Correct
+    # SQL Equiv. = SELECT * FROM Users where ID = 1
+    user = Users.query.get(user_id)
+    # Handle errors
+    if user is None:
+        return jsonify({'error': 'You must specify an exisiting user'}), 400
+
+    # 3. Check Vehicle is Correct
+    # SQL Equiv. = SELECT * FROM Planets where vehicle name = body['vehicle_name']
+    favorite_vehicle = Vehicles.query.filter_by(name=body['vehicle_name']).first()
+    if favorite_vehicle is None:
+        return jsonify({'error': 'You must specify an exisiting vehicle'}), 400
     
+    # once checked, now need to get vehicle's id in order to add it to Favorite_Planets table
+    favorite_vehicle_id = favorite_vehicle.id
 
-    # Planets
-    if "planet_id" in body:
-        new_fav_planet = Favorite_Planets()
-        new_fav_planet.user_id = body['user_id']
-        new_fav_planet.planet_id = body['planet_id']
+    # 4. Now all is correct, add this vehicle to user's list of favorite vehicles 
+    new_fav_vehicle = Favorite_Vehicles()
+    new_fav_vehicle.user_id = user_id
+    new_fav_vehicle.vehicle_id = favorite_vehicle_id
 
-        db.session.add(new_fav_planet)  # adds to db
-        db.session.commit()  # like git commit, saves changes
+    db.session.add(new_fav_vehicle)  # adds to db
+    db.session.commit()  # like git commit, saves changes
+    
+    # For JSON Reply
+    favorite_vehicles = db.session.query(Favorite_Vehicles, Vehicles).join(Vehicles).filter(Favorite_Vehicles.user_id == user_id).all()
+    favorite_vehicles_serialized = []
+    for favorite_item, vehicle_item in favorite_vehicles:
+        favorite_vehicles_serialized.append({'favorite_vehicle_id': favorite_item.id,'vehicle_info': vehicle_item.serialize()})
 
-    # Vehicles
-    if "vehicle_id" in body:
-        new_fav_vehicle = Favorite_Vehicles()
-        new_fav_vehicle.user_id = body['user_id']
-        new_fav_vehicle.vehicle_id = body['vehicle_id']
+    return jsonify({'msg': 'Favorite added', 'Favorite_Vehicles': favorite_vehicles_serialized}), 200
 
-        db.session.add(new_fav_vehicle)  # adds to db
-        db.session.commit()  # like git commit, saves changes
 
-    return jsonify({'msg': 'Favorite added successfully'}), 200
-
+# 3 separate deletes mimicking above? 
 
 # DELETE USER FAV CHARACTER
 @app.route('/users/<int:user_id>/favorites/character/<int:fav_id>', methods=['DELETE'])
