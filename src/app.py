@@ -653,21 +653,55 @@ def handle_addVehicleToUserFavs(user_id):  # user_id = <int: user_id>
 
     return jsonify({'msg': 'Favorite added', 'Favorite_Vehicles': favorite_vehicles_serialized}), 200
 
-
-# 3 separate deletes mimicking above? 
-
 # DELETE USER FAV CHARACTER
-@app.route('/users/<int:user_id>/favorites/character/<int:fav_id>', methods=['DELETE'])
-def deleteUserFav(fav_id):
-    fav_character = Favorite_Characters.query.get(fav_id)
+@app.route('/users/<int:user_id>/favorites/character', methods=['DELETE'])
+def deleteUserFavChar(user_id):
 
+    # 1. Dealing with incoming JSON
+    body = request.get_json(silent=True)
+    # Handle Errors
+    if body is None:
+        return jsonify({'error': 'You must include a body in the request'}), 400
+    if 'character_name' not in body:
+        return jsonify({'error': 'You must specify the "character_name" to delete from this users favorites'}), 400
+
+    # 2. Check User is Correct
+    # SQL Equiv. = SELECT * FROM Users where ID = 1
+    user = Users.query.get(user_id)
     # Handle errors
-    if fav_character is None:
-        return jsonify({'error': 'This favorite with id {} doesn\'t exist'.format(fav_id)}), 400
+    if user is None:
+        return jsonify({'error': 'You must specify an exisiting user'}), 400
 
+    # 3. Check Character is Correct
+    # SQL Equiv. = SELECT * FROM Characters where character name = body['character_name']
+    character_to_delete = Characters.query.filter_by(name=body['character_name']).first()
+    if character_to_delete is None:
+        return jsonify({'error': 'You must specify an exisiting character'}), 400
+    
+    # 4. Check this user has previously favorited that Character
+    fav_character = Favorite_Characters.query.filter_by(user_id=user_id, character_id=character_to_delete.id).first()
+    if fav_character is None:
+        return jsonify({'error': 'This user didnt favorite this character before'}), 400
+
+    # 4. Now all is correct, delete this character from user's list of favorite characters 
     db.session.delete(fav_character)
     db.session.commit()
-    return jsonify({'msg': 'Favorite deleted for this user'}), 200
+
+    # For JSON Reply
+    favorite_characters = db.session.query(Favorite_Characters, Characters).join(Characters).filter(Favorite_Characters.user_id == user_id).all()
+    favorite_characters_serialized = []
+    for favorite_item, character_item in favorite_characters:
+        favorite_characters_serialized.append({'favorite_character_id': favorite_item.id,'character_info': character_item.serialize()})
+
+    user_name = Users.query.filter_by(id=user_id).first().name
+
+    return jsonify({'msg': 'This character has been deleted from the users favorite characters list',
+                    'user': user_name,
+                    'Favorite_Characters': favorite_characters_serialized}), 200
+
+
+
+
 
 
 # --------- END OF FILE -----------
