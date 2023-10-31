@@ -699,9 +699,97 @@ def deleteUserFavChar(user_id):
                     'user': user_name,
                     'Favorite_Characters': favorite_characters_serialized}), 200
 
+# DELETE USER FAV PLANET
+@app.route('/users/<int:user_id>/favorites/planet', methods=['DELETE'])
+def deleteUserFavPlanet(user_id):
 
+    # 1. Dealing with incoming JSON
+    body = request.get_json(silent=True)
+    # Handle Errors
+    if body is None:
+        return jsonify({'error': 'You must include a body in the request'}), 400
+    if 'planet_name' not in body:
+        return jsonify({'error': 'You must specify the "planet_name" to delete from this users favorites'}), 400
 
+    # 2. Check User is Correct
+    # SQL Equiv. = SELECT * FROM Users where ID = 1
+    user = Users.query.get(user_id)
+    # Handle errors
+    if user is None:
+        return jsonify({'error': 'You must specify an exisiting user'}), 400
 
+    # 3. Check planet is Correct
+    # SQL Equiv. = SELECT * FROM Planets where planet name = body['character_name']
+    planet_to_delete = Planets.query.filter_by(name=body['planet_name']).first()
+    if planet_to_delete is None:
+        return jsonify({'error': 'You must specify an exisiting planet'}), 400
+    
+    # 4. Check this user has previously favorited that planet
+    fav_planet = Favorite_Planets.query.filter_by(user_id=user_id, planet_id=planet_to_delete.id).first()
+    if fav_planet is None:
+        return jsonify({'error': 'This user didnt favorite this planet before'}), 400
+
+    # 4. Now all is correct, delete this planet from user's list of favorite Planets 
+    db.session.delete(fav_planet)
+    db.session.commit()
+
+    # For JSON Reply
+    favorite_planets = db.session.query(Favorite_Planets, Planets).join(Planets).filter(Favorite_Planets.user_id == user_id).all()
+    favorite_planets_serialized = []
+    for favorite_item, planet_item in favorite_planets:
+        favorite_planets_serialized.append({'favorite_planet_id': favorite_item.id,'planet_info': planet_item.serialize()})
+
+    user_name = Users.query.filter_by(id=user_id).first().name
+
+    return jsonify({'msg': 'This planet has been deleted from the users favorite planets list',
+                    'user': user_name,
+                    'Favorite_Planets': favorite_planets_serialized}), 200
+
+# DELETE USER FAV VEHICLE
+@app.route('/users/<int:user_id>/favorites/vehicle', methods=['DELETE'])
+def deleteUserFavVehicle(user_id):
+
+    # 1. Dealing with incoming JSON
+    body = request.get_json(silent=True)
+    # Handle Errors
+    if body is None:
+        return jsonify({'error': 'You must include a body in the request'}), 400
+    if 'vehicle_name' not in body:
+        return jsonify({'error': 'You must specify the "vehicle_name" to delete from this users favorites'}), 400
+
+    # 2. Check User is Correct
+    # SQL Equiv. = SELECT * FROM Users where ID = 1
+    user = Users.query.get(user_id)
+    # Handle errors
+    if user is None:
+        return jsonify({'error': 'You must specify an exisiting user'}), 400
+
+    # 3. Check vehicle is Correct
+    # SQL Equiv. = SELECT * FROM Vehicles where vehicle name = body['character_name']
+    vehicle_to_delete = Vehicles.query.filter_by(name=body['vehicle_name']).first()
+    if vehicle_to_delete is None:
+        return jsonify({'error': 'You must specify an exisiting vehicle'}), 400
+    
+    # 4. Check this user has previously favorited that vehicle
+    fav_vehicle = Favorite_Vehicles.query.filter_by(user_id=user_id, vehicle_id=vehicle_to_delete.id).first()
+    if fav_vehicle is None:
+        return jsonify({'error': 'This user didnt favorite this vehicle before'}), 400
+
+    # 4. Now all is correct, delete this vehicle from user's list of favorite vehicles 
+    db.session.delete(fav_vehicle)
+    db.session.commit()
+
+    # For JSON Reply
+    favorite_vehicles = db.session.query(Favorite_Vehicles, Vehicles).join(Vehicles).filter(Favorite_Vehicles.user_id == user_id).all()
+    favorite_vehicles_serialized = []
+    for favorite_item, vehicle_item in favorite_vehicles:
+        favorite_vehicles_serialized.append({'favorite_vehicle_id': favorite_item.id,'vehicle_info': vehicle_item.serialize()})
+
+    user_name = Users.query.filter_by(id=user_id).first().name
+
+    return jsonify({'msg': 'This vehicle has been deleted from the users favorite vehicles list',
+                    'user': user_name,
+                    'Favorite_Vehicles': favorite_vehicles_serialized}), 200
 
 
 # --------- END OF FILE -----------
