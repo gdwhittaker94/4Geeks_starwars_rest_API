@@ -1,7 +1,12 @@
-<a href="https://www.breatheco.de"><img height="280" align="right" src="https://github.com/4GeeksAcademy/flask-rest-hello/blob/main/docs/assets/badge.png?raw=true"></a>
+# Starwars REST API 
+For this project we were tasked with creating our own API instead of just communicating with one like we had been doing in previous projects. Specifically, a REST API ('Representational State Transfer API') which is a type of API that conforms to the constraints of the REST architectural style, uses HTTP methods (typically to perform CRUD operations), usually returns data in JSON format, and features a stateless client-server model. For more info [see here](t.ly/xxMkG).
 
-# Flask Boilerplate for Junior Developers
+To make this REST API we used Python, Flask and SQLAlchemy together for the first time, as well as Postman API for testing, in order to imitate the same API we had been using to create a recent [Starwars blog project](https://github.com/gdwhittaker94/4Geeks_stars_wars_blog).
 
+[starwars_rest_api.webm](https://github.com/gdwhittaker94/4Geeks_starwars_rest_API/assets/105855731/d4840bd2-a924-472d-88cc-82bb7e2a3806)
+
+
+# Project Documentatino 
 Create flask API's in minutes, [📹 watch the video tutorial](https://youtu.be/ORxQ-K3BzQA).
 
 - [Extensive documentation here](https://start.4geeksacademy.com).
@@ -52,13 +57,3 @@ $ pipenv run upgrade  # (to update your databse with the migrations)
 1. Once you run the `pipenv run start` command your API will start running live and you can open it by clicking in the "ports" tab and then clicking "open browser".
 
 > ✋ If you are working on a coding cloud like [Codespaces](https://docs.github.com/en/codespaces/developing-in-codespaces/forwarding-ports-in-your-codespace#sharing-a-port) or [Gitpod](https://www.gitpod.io/docs/configure/workspaces/ports#configure-port-visibility) make sure that your forwared port is public.
-
-## Publish/Deploy your website!
-
-This boilerplate it's 100% read to deploy with Render.com and Herkou in a matter of minutes. Please read the [official documentation about it](https://start.4geeksacademy.com/deploy).
-
-### Contributors
-
-This template was built as part of the 4Geeks Academy [Coding Bootcamp](https://4geeksacademy.com/us/coding-bootcamp) by [Alejandro Sanchez](https://twitter.com/alesanchezr) and many other contributors. Find out more about our [Full Stack Developer Course](https://4geeksacademy.com/us/coding-bootcamps/part-time-full-stack-developer), and [Data Science Bootcamp](https://4geeksacademy.com/us/coding-bootcamps/datascience-machine-learning).
-
-You can find other templates and resources like this at the [school github page](https://github.com/4geeksacademy/).
