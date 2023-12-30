@@ -6,7 +6,7 @@ To make this REST API we used Python, Flask and SQLAlchemy together for the firs
 [starwars_rest_api.webm](https://github.com/gdwhittaker94/4Geeks_starwars_rest_API/assets/105855731/d4840bd2-a924-472d-88cc-82bb7e2a3806)
 
 
-## Project Documentation
+## Original Project Documentation
 Create flask API's in minutes, [📹 watch the video tutorial](https://youtu.be/ORxQ-K3BzQA).
 
 - [Extensive documentation here](https://start.4geeksacademy.com).
